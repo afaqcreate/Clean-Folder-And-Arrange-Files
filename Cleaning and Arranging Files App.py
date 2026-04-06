@@ -1,42 +1,69 @@
 import os
-from tkinter import *
+from pathlib import Path
 from tkinter import filedialog
+from tkinter import *
 
-def selectPath ():
-    
-    selectPath = ''
-    selectPath = filedialog.askdirectory(title="Select your Folder to Clean and Arrange")
-    if selectPath:
-        result_display = os.listdir(selectPath)
-        file = []
-        folder = []
-
-        for item in result_display:
-            pathFilesAndFolder = os.path.join(selectPath, item)
-        
-            if os.path.isfile(pathFilesAndFolder):
-                file.append(item)
-            elif os.path.isdir(pathFilesAndFolder):
-                folder.append(item)
-        print(file, folder)
-    else:
-        ('Please Select the Folder')
-
-# color
 color_bg ="#192C2C"
 color_fg = "#f7f7f7"
 
-# Window
+def filepath():
+    pathFileAndFolder = filedialog.askdirectory(title="Select your Folder to Clean and Arrange")
+    
+    if not pathFileAndFolder:
+        print("Please select the Path or File or Folder")
+        return
+    
+    listItems = Path(pathFileAndFolder)
+    files = []
+    folders = []
+
+    for item in listItems.iterdir():
+        if item.is_dir():
+            folders.append(item.name)
+
+        elif item.is_file():
+            files.append(item.name)
+    
+    lfiles = len(files)
+    lfolders = len(folders)
+
+    file_list = "\n".join(files)
+
+    folders_list = "\n".join(folders)
+    display_text = f"📄 FILES: {lfiles}\n[ {file_list} ]\n\n📁 FOLDERS: {lfolders}\n[ {folders_list} ]"
+    nameOfFilesAndFolders.config(text=display_text)
+    textBoxForUrl.insert(0, item)
+def pathFile():
+    pass
+
 root = Tk()
 root.title("Cleaning and Arranging Files App")
-root.geometry("500x500")
-root.configure(background=color_bg)
+root.geometry("600x400")
+root.configure(bg=color_bg)
 
-text_for_your_dirBox = Label(root, bg=color_bg, fg=color_fg ,text="Text Path Your Diractary", font=("Corbel", 12, "bold")).place(x=10, y=25)
+textBoxForUrl = Entry(root)
+textBoxForUrl.place(x=20,y=50, width=200, height=30)
 
-button_for_chose_path = Button(root, text="Select your Folder to Clean/Arrange",  width=35, height=2, font=("Corbel", 10, "bold"), command= lambda : selectPath()).place(x=230, y=45)
-# logic for path how it's work
+text_for_your_dirBox = Label(root, bg=color_bg, fg=color_fg ,text="Write your path", font=("Corbel", 12, "bold")).place(x=10, y=25)
+button_dir = Button(root, 
+                    text="Select your Folder to Clean/Arrange",  
+                    width=35, 
+                    height=2, 
+                    font=("Corbel", 10, "bold"), 
+                    command= lambda : filepath())
+button_dir.place(x=240, y=45)
 
-textBox_for_path_url = Entry(root).place(x=20, y=50, height= 30, width=200)
+nameOfFilesAndFolders = Label(
+                            root, 
+                            font=("Corbel", 10, "bold"),
+                            text=("📄 FILES :\n\n📁 FOLDERS:"), 
+                             justify='left', bg=color_bg, fg=color_fg)
+nameOfFilesAndFolders.place(x=20, y=100)
+
+# scroll = SCROLL()
+# text = Text(root, yscrollcommand=scroll.set)
+
+# scroll_bar = Scrollbar(root, command=text.yview)
+
 
 root.mainloop()
