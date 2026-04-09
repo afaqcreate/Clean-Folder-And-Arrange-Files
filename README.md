@@ -18,5 +18,3 @@ A professional, scalable file organization tool built with Python. Automatically
 
 - Python 3.8 or higher
 - No external dependencies (uses only Python standard library)
-
-## 🚀 Quick Start
